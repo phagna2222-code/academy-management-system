@@ -2,11 +2,13 @@
 @section('pageTitle', __('app.menu.subjects'))
 @section('breadcrumbTitle', __('app.menu.subjects'))
 @section('content')
+    @livewire('admin.subject-modal')
+
     @include('admin.components._datatable_card', [
         'title'       => __('app.subject.plural'),
-        'createRoute' => 'admin.subjects.create',
+        'module'      => 'subject',
         'dataUrl'     => route('admin.subjects.data'),
-        'tableId'     => 'subj-table',
+        'tableId'     => 'subjects-table',
         'columns'     => [
             ['data' => 'id',           'title' => __('app.common.id')],
             ['data' => 'academy_name', 'title' => __('app.fields.academy'), 'orderable' => false],

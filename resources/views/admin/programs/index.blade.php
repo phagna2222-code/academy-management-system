@@ -2,11 +2,13 @@
 @section('pageTitle', __('app.menu.programs'))
 @section('breadcrumbTitle', __('app.menu.programs'))
 @section('content')
+    @livewire('admin.program-modal')
+
     @include('admin.components._datatable_card', [
         'title'       => __('app.program.plural'),
-        'createRoute' => 'admin.programs.create',
+        'module'      => 'program',
         'dataUrl'     => route('admin.programs.data'),
-        'tableId'     => 'pgm-table',
+        'tableId'     => 'programs-table',
         'columns'     => [
             ['data' => 'id',             'title' => __('app.common.id')],
             ['data' => 'academy_name',   'title' => __('app.fields.academy'), 'orderable' => false],

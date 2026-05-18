@@ -2,11 +2,13 @@
 @section('pageTitle', __('app.menu.semesters'))
 @section('breadcrumbTitle', __('app.menu.semesters'))
 @section('content')
+    @livewire('admin.semester-modal')
+
     @include('admin.components._datatable_card', [
         'title'       => __('app.semester.plural'),
-        'createRoute' => 'admin.semesters.create',
+        'module'      => 'semester',
         'dataUrl'     => route('admin.semesters.data'),
-        'tableId'     => 'sem-table',
+        'tableId'     => 'semesters-table',
         'columns'     => [
             ['data' => 'id',                 'title' => __('app.common.id')],
             ['data' => 'academy_name',       'title' => __('app.fields.academy'), 'orderable' => false],

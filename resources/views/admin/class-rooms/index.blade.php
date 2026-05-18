@@ -2,11 +2,13 @@
 @section('pageTitle', __('app.menu.class_rooms'))
 @section('breadcrumbTitle', __('app.menu.class_rooms'))
 @section('content')
+    @livewire('admin.class-room-modal')
+
     @include('admin.components._datatable_card', [
         'title'       => __('app.class_room.plural'),
-        'createRoute' => 'admin.class-rooms.create',
+        'module'      => 'class_room',
         'dataUrl'     => route('admin.class-rooms.data'),
-        'tableId'     => 'cls-table',
+        'tableId'     => 'class-rooms-table',
         'columns'     => [
             ['data' => 'id',                 'title' => __('app.common.id')],
             ['data' => 'class_code',         'title' => __('app.common.code')],

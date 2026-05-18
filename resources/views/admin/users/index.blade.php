@@ -2,9 +2,11 @@
 @section('pageTitle', __('app.menu.users'))
 @section('breadcrumbTitle', __('app.menu.users'))
 @section('content')
+    @livewire('admin.user-modal')
+
     @include('admin.components._datatable_card', [
         'title'       => __('app.user.plural'),
-        'createRoute' => 'admin.users.create',
+        'module'      => 'user',
         'dataUrl'     => route('admin.users.data'),
         'tableId'     => 'users-table',
         'columns'     => [

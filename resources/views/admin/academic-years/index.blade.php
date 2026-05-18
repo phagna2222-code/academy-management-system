@@ -2,11 +2,13 @@
 @section('pageTitle', __('app.menu.academic_years'))
 @section('breadcrumbTitle', __('app.menu.academic_years'))
 @section('content')
+    @livewire('admin.academic-year-modal')
+
     @include('admin.components._datatable_card', [
         'title'       => __('app.academic_year.plural'),
-        'createRoute' => 'admin.academic-years.create',
+        'module'      => 'academic_year',
         'dataUrl'     => route('admin.academic-years.data'),
-        'tableId'     => 'years-table',
+        'tableId'     => 'academic-years-table',
         'columns'     => [
             ['data' => 'id',           'title' => __('app.common.id')],
             ['data' => 'academy_name', 'title' => __('app.fields.academy'), 'orderable' => false],

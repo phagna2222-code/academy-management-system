@@ -2,11 +2,13 @@
 @section('pageTitle', __('app.menu.enrollments'))
 @section('breadcrumbTitle', __('app.menu.enrollments'))
 @section('content')
+    @livewire('admin.enrollment-modal')
+
     @include('admin.components._datatable_card', [
         'title'       => __('app.enrollment.plural'),
-        'createRoute' => 'admin.enrollments.create',
+        'module'      => 'enrollment',
         'dataUrl'     => route('admin.enrollments.data'),
-        'tableId'     => 'enr-table',
+        'tableId'     => 'enrollments-table',
         'columns'     => [
             ['data' => 'id',                 'title' => __('app.common.id')],
             ['data' => 'enrollment_no',      'title' => __('app.fields.enrollment_no')],

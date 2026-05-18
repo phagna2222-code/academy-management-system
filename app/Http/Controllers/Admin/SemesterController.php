@@ -3,10 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\AcademicYear;
-use App\Models\Academy;
 use App\Models\Semester;
-use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class SemesterController extends Controller
@@ -32,60 +29,5 @@ class SemesterController extends Controller
             ->addColumn('actions', fn (Semester $r) => view('admin.semesters._actions', ['row' => $r])->render())
             ->rawColumns(['status', 'actions'])
             ->make(true);
-    }
-
-    public function create()
-    {
-        return view('admin.semesters.create', [
-            'semester' => new Semester,
-            'academies' => Academy::orderBy('name')->get(),
-            'academicYears' => AcademicYear::orderBy('name')->get(),
-        ]);
-    }
-
-    public function store(Request $request)
-    {
-        Semester::create($this->validated($request));
-        sweetalert()->success(__('app.created_successfully'));
-
-        return redirect()->route('admin.semesters.index');
-    }
-
-    public function edit(Semester $semester)
-    {
-        return view('admin.semesters.edit', [
-            'semester' => $semester,
-            'academies' => Academy::orderBy('name')->get(),
-            'academicYears' => AcademicYear::orderBy('name')->get(),
-        ]);
-    }
-
-    public function update(Request $request, Semester $semester)
-    {
-        $semester->update($this->validated($request));
-        sweetalert()->success(__('app.updated_successfully'));
-
-        return redirect()->route('admin.semesters.index');
-    }
-
-    public function destroy(Semester $semester)
-    {
-        $semester->delete();
-        sweetalert()->success(__('app.deleted_successfully'));
-
-        return back();
-    }
-
-    protected function validated(Request $request): array
-    {
-        return $request->validate([
-            'academy_id' => ['required', 'exists:academies,id'],
-            'academic_year_id' => ['required', 'exists:academic_years,id'],
-            'name' => ['required', 'string', 'max:255'],
-            'start_date' => ['nullable', 'date'],
-            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
-            'sort_order' => ['nullable', 'integer', 'min:0'],
-            'status' => ['required', 'in:active,closed'],
-        ]);
     }
 }

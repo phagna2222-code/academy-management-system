@@ -42,37 +42,25 @@ Route::middleware(['auth'])
         Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::patch('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
-        // A small helper to declare a CRUD resource + its `data` endpoint, all
-        // wrapped in the matching permission middleware.
-        $crud = function (string $name, string $param, string $controller, string $module) {
+        // Each CRUD module only needs index + data (Livewire handles create/edit/delete).
+        $crud = function (string $name, string $controller, string $module) {
             Route::middleware("permission:{$module}.view")->group(function () use ($name, $controller) {
                 Route::get($name, [$controller, 'index'])->name("{$name}.index");
                 Route::get("{$name}/data", [$controller, 'data'])->name("{$name}.data");
             });
-            Route::middleware("permission:{$module}.create")->group(function () use ($name, $controller) {
-                Route::get("{$name}/create", [$controller, 'create'])->name("{$name}.create");
-                Route::post($name, [$controller, 'store'])->name("{$name}.store");
-            });
-            Route::middleware("permission:{$module}.edit")->group(function () use ($name, $param, $controller) {
-                Route::get("{$name}/{{$param}}/edit", [$controller, 'edit'])->name("{$name}.edit");
-                Route::put("{$name}/{{$param}}", [$controller, 'update'])->name("{$name}.update");
-            });
-            Route::middleware("permission:{$module}.delete")->group(function () use ($name, $param, $controller) {
-                Route::delete("{$name}/{{$param}}", [$controller, 'destroy'])->name("{$name}.destroy");
-            });
         };
 
-        $crud('academies', 'academy', AcademyController::class, 'academy');
-        $crud('campuses', 'campus', CampusController::class, 'campus');
-        $crud('users', 'user', UserController::class, 'user');
-        $crud('roles', 'role', RoleController::class, 'role');
-        $crud('permissions', 'permission', PermissionController::class, 'permission');
-        $crud('academic-years', 'academicYear', AcademicYearController::class, 'academic_year');
-        $crud('semesters', 'semester', SemesterController::class, 'semester');
-        $crud('programs', 'program', ProgramController::class, 'program');
-        $crud('subjects', 'subject', SubjectController::class, 'subject');
-        $crud('teachers', 'teacher', TeacherController::class, 'teacher');
-        $crud('students', 'student', StudentController::class, 'student');
-        $crud('class-rooms', 'classRoom', ClassRoomController::class, 'class_room');
-        $crud('enrollments', 'enrollment', EnrollmentController::class, 'enrollment');
+        $crud('academies', AcademyController::class, 'academy');
+        $crud('campuses', CampusController::class, 'campus');
+        $crud('users', UserController::class, 'user');
+        $crud('roles', RoleController::class, 'role');
+        $crud('permissions', PermissionController::class, 'permission');
+        $crud('academic-years', AcademicYearController::class, 'academic_year');
+        $crud('semesters', SemesterController::class, 'semester');
+        $crud('programs', ProgramController::class, 'program');
+        $crud('subjects', SubjectController::class, 'subject');
+        $crud('teachers', TeacherController::class, 'teacher');
+        $crud('students', StudentController::class, 'student');
+        $crud('class-rooms', ClassRoomController::class, 'class_room');
+        $crud('enrollments', EnrollmentController::class, 'enrollment');
     });
