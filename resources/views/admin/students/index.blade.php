@@ -2,11 +2,13 @@
 @section('pageTitle', __('app.menu.students'))
 @section('breadcrumbTitle', __('app.menu.students'))
 @section('content')
+    @livewire('admin.student-modal')
+
     @include('admin.components._datatable_card', [
         'title'       => __('app.student.plural'),
-        'createRoute' => 'admin.students.create',
+        'module'      => 'student',
         'dataUrl'     => route('admin.students.data'),
-        'tableId'     => 'stu-table',
+        'tableId'     => 'students-table',
         'columns'     => [
             ['data' => 'id',             'title' => __('app.common.id')],
             ['data' => 'student_code',   'title' => __('app.fields.student_code')],

@@ -4,9 +4,11 @@
 @section('breadcrumbTitle', __('app.menu.campuses'))
 
 @section('content')
+    @livewire('admin.campus-modal')
+
     @include('admin.components._datatable_card', [
         'title'       => __('app.campus.plural'),
-        'createRoute' => 'admin.campuses.create',
+        'module'      => 'campus',
         'dataUrl'     => route('admin.campuses.data'),
         'tableId'     => 'campuses-table',
         'columns'     => [

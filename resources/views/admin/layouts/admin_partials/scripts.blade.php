@@ -94,10 +94,48 @@
         });
     };
 
+    // Show a SweetAlert2 toast.
+    window.AMS.toast = function (icon, message) {
+        if (typeof Swal === 'undefined') return;
+        Swal.fire({
+            icon: icon,
+            title: message,
+            toast: true,
+            position: 'top-end',
+            timer: 2500,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        });
+    };
+
+    // Reload a server-side DataTable by id.
+    window.AMS.reloadTable = function (tableId) {
+        if (!window.jQuery || !jQuery.fn.DataTable) return;
+        var $t = jQuery('#' + tableId);
+        if ($t.length && jQuery.fn.DataTable.isDataTable($t)) {
+            $t.DataTable().ajax.reload(null, false);
+        }
+    };
+
+    // Show / hide a Bootstrap 5 modal by element id.
+    window.AMS.showModal = function (id) {
+        var el = document.getElementById(id);
+        if (el && window.bootstrap && bootstrap.Modal) {
+            bootstrap.Modal.getOrCreateInstance(el).show();
+        }
+    };
+    window.AMS.hideModal = function (id) {
+        var el = document.getElementById(id);
+        if (el && window.bootstrap && bootstrap.Modal) {
+            var inst = bootstrap.Modal.getOrCreateInstance(el);
+            inst.hide();
+        }
+    };
+
     document.addEventListener('DOMContentLoaded', function () {
         window.AMS.initPlugins(document);
 
-        // Catch any delete <form> with .js-delete-form
+        // Catch any delete <form> with .js-delete-form (legacy).
         document.body.addEventListener('submit', function (e) {
             var form = e.target.closest('form.js-delete-form');
             if (!form || form.dataset.confirmed === '1') return;
@@ -113,31 +151,46 @@
             });
         });
 
-        // Catch any link with .js-confirm-delete (used by DataTables)
+        // DataTable row actions: edit button — dispatch Livewire event.
         document.body.addEventListener('click', function (e) {
-            var link = e.target.closest('.js-confirm-delete');
-            if (!link) return;
+            var btn = e.target.closest('.js-livewire-edit');
+            if (!btn) return;
+            e.preventDefault();
+            if (!window.Livewire) return;
+            Livewire.dispatch(btn.dataset.module + ':edit', { id: parseInt(btn.dataset.id, 10) });
+        });
+
+        // DataTable row actions: delete button — confirm then dispatch Livewire event.
+        document.body.addEventListener('click', function (e) {
+            var btn = e.target.closest('.js-livewire-delete');
+            if (!btn) return;
             e.preventDefault();
             window.AMS.confirmDelete({}).then(function (res) {
-                if (res.isConfirmed) {
-                    var form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = link.dataset.action || link.getAttribute('href');
-                    form.innerHTML =
-                        '<input type="hidden" name="_token" value="' + (document.querySelector('meta[name="csrf-token"]')?.content || '') + '">' +
-                        '<input type="hidden" name="_method" value="DELETE">';
-                    document.body.appendChild(form);
-                    form.submit();
+                if (res.isConfirmed && window.Livewire) {
+                    Livewire.dispatch(btn.dataset.module + ':delete', { id: parseInt(btn.dataset.id, 10) });
                 }
             });
         });
     });
 
-    // Re-init plugins after every Livewire DOM update
+    // Re-init plugins after every Livewire DOM update.
     document.addEventListener('livewire:navigated', function () { window.AMS.initPlugins(document); });
     document.addEventListener('livewire:initialized', function () {
         if (!window.Livewire) return;
         Livewire.hook('morph.updated', function ({ el }) { window.AMS.initPlugins(el); });
+
+        // Livewire-driven modal show / hide.
+        Livewire.on('modal:show',   function (e) { window.AMS.showModal(e.id); });
+        Livewire.on('modal:hide',   function (e) { window.AMS.hideModal(e.id); });
+
+        // Livewire-driven DataTable reload.
+        Livewire.on('datatable:reload', function (e) { window.AMS.reloadTable(e.table); });
+
+        // Livewire-driven SweetAlert toasts.
+        Livewire.on('toast:success', function (e) { window.AMS.toast('success', e.message); });
+        Livewire.on('toast:error',   function (e) { window.AMS.toast('error',   e.message); });
+        Livewire.on('toast:warning', function (e) { window.AMS.toast('warning', e.message); });
+        Livewire.on('toast:info',    function (e) { window.AMS.toast('info',    e.message); });
 
         // Locale switch — swap the page without a hard refresh using Livewire navigate.
         Livewire.on('locale-changed', function () {

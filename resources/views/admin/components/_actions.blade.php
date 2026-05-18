@@ -1,21 +1,28 @@
 @php
     /** @var int $id */
-    /** @var string $editRoute */
-    /** @var string $deleteRoute */
-    /** @var string $editParam */
+    /** @var string $module     Livewire event prefix (e.g. 'academy'). */
+    /** @var bool $canEdit      Whether to render the edit button. */
+    /** @var bool $canDelete    Whether to render the delete button. */
+    $canEdit   = $canEdit   ?? true;
+    $canDelete = $canDelete ?? true;
 @endphp
 <div class="d-inline-flex gap-1">
-    @if(!empty($editRoute) && \Illuminate\Support\Facades\Route::has($editRoute))
-        <a href="{{ route($editRoute, [$editParam => $id]) }}" class="btn btn-sm btn-outline-primary" title="{{ __('app.actions.edit') }}">
+    @if($canEdit)
+        <button type="button"
+                class="btn btn-sm btn-outline-primary js-livewire-edit"
+                data-module="{{ $module }}"
+                data-id="{{ $id }}"
+                title="{{ __('app.actions.edit') }}">
             <i class="bi bi-pencil"></i>
-        </a>
+        </button>
     @endif
-    @if(!empty($deleteRoute) && \Illuminate\Support\Facades\Route::has($deleteRoute))
-        <a href="{{ route($deleteRoute, [$editParam => $id]) }}"
-           class="btn btn-sm btn-outline-danger js-confirm-delete"
-           data-action="{{ route($deleteRoute, [$editParam => $id]) }}"
-           title="{{ __('app.actions.delete') }}">
+    @if($canDelete)
+        <button type="button"
+                class="btn btn-sm btn-outline-danger js-livewire-delete"
+                data-module="{{ $module }}"
+                data-id="{{ $id }}"
+                title="{{ __('app.actions.delete') }}">
             <i class="bi bi-trash"></i>
-        </a>
+        </button>
     @endif
 </div>

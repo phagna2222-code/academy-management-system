@@ -4,9 +4,11 @@
 @section('breadcrumbTitle', __('app.menu.academies'))
 
 @section('content')
+    @livewire('admin.academy-modal')
+
     @include('admin.components._datatable_card', [
         'title'       => __('app.academy.plural'),
-        'createRoute' => 'admin.academies.create',
+        'module'      => 'academy',
         'dataUrl'     => route('admin.academies.data'),
         'tableId'     => 'academies-table',
         'order'       => [[0, 'desc']],

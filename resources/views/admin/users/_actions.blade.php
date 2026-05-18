@@ -1,6 +1,5 @@
 @include('admin.components._actions', [
-    'id'           => $row->id,
-    'editRoute'    => 'admin.users.edit',
-    'deleteRoute'  => 'admin.users.destroy',
-    'editParam'    => 'user',
+    'id'         => $row->id,
+    'module'     => 'user',
+    'canDelete'  => $row->id !== auth()->id(),
 ])

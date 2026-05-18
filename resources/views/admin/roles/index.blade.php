@@ -2,9 +2,11 @@
 @section('pageTitle', __('app.menu.roles'))
 @section('breadcrumbTitle', __('app.menu.roles'))
 @section('content')
+    @livewire('admin.role-modal')
+
     @include('admin.components._datatable_card', [
         'title'       => __('app.role.plural'),
-        'createRoute' => 'admin.roles.create',
+        'module'      => 'role',
         'dataUrl'     => route('admin.roles.data'),
         'tableId'     => 'roles-table',
         'columns'     => [

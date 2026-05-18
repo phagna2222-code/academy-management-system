@@ -2,11 +2,13 @@
 @section('pageTitle', __('app.menu.teachers'))
 @section('breadcrumbTitle', __('app.menu.teachers'))
 @section('content')
+    @livewire('admin.teacher-modal')
+
     @include('admin.components._datatable_card', [
         'title'       => __('app.teacher.plural'),
-        'createRoute' => 'admin.teachers.create',
+        'module'      => 'teacher',
         'dataUrl'     => route('admin.teachers.data'),
-        'tableId'     => 'teach-table',
+        'tableId'     => 'teachers-table',
         'columns'     => [
             ['data' => 'id',            'title' => __('app.common.id')],
             ['data' => 'teacher_code',  'title' => __('app.fields.teacher_code')],

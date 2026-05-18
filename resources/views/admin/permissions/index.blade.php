@@ -2,9 +2,11 @@
 @section('pageTitle', __('app.menu.permissions'))
 @section('breadcrumbTitle', __('app.menu.permissions'))
 @section('content')
+    @livewire('admin.permission-modal')
+
     @include('admin.components._datatable_card', [
         'title'       => __('app.permission.plural'),
-        'createRoute' => 'admin.permissions.create',
+        'module'      => 'permission',
         'dataUrl'     => route('admin.permissions.data'),
         'tableId'     => 'permissions-table',
         'columns'     => [

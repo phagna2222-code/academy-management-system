@@ -1,7 +1,9 @@
 @php
     /**
      * @var string $title           Card title.
-     * @var string|null $createRoute Route name for "Add new" button (optional).
+     * @var string|null $module     Optional Livewire event prefix; if set, the "Create"
+     *                              button dispatches '{module}:create' instead of linking.
+     * @var string|null $createRoute Route name for "Add new" button (optional, legacy).
      * @var string $dataUrl         URL that returns DataTables JSON.
      * @var array  $columns          Array of ['data' => 'col', 'title' => 'X', 'orderable' => bool, 'searchable' => bool].
      * @var string $tableId         Unique ID for the <table>.
@@ -11,6 +13,7 @@
     $order     = $order     ?? [[0, 'desc']];
     $columns   = $columns   ?? [];
     $createRoute = $createRoute ?? null;
+    $module      = $module      ?? null;
 @endphp
 
 <div class="card radius-10">
@@ -18,7 +21,13 @@
         <div class="d-flex align-items-center mb-3 flex-wrap gap-2">
             <h5 class="mb-0">{{ $title }}</h5>
             <div class="ms-auto d-flex gap-2">
-                @if($createRoute && \Illuminate\Support\Facades\Route::has($createRoute))
+                @if($module)
+                    <button type="button"
+                            class="btn btn-primary btn-sm"
+                            onclick="Livewire.dispatch('{{ $module }}:create')">
+                        <i class="bi bi-plus-lg me-1"></i>{{ __('app.actions.create') }}
+                    </button>
+                @elseif($createRoute && \Illuminate\Support\Facades\Route::has($createRoute))
                     <a href="{{ route($createRoute) }}" class="btn btn-primary btn-sm">
                         <i class="bi bi-plus-lg me-1"></i>{{ __('app.actions.create') }}
                     </a>
