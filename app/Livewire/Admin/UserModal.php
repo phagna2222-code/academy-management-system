@@ -63,7 +63,7 @@ class UserModal extends Component
     #[On('user:create')]
     public function openCreate(): void
     {
-        $this->authorize('user.create');
+        $this->ensurePermission('user.create');
         $this->resetForm();
         $this->dispatch('modal:show', id: 'userModal');
     }
@@ -71,7 +71,7 @@ class UserModal extends Component
     #[On('user:edit')]
     public function openEdit(int $id): void
     {
-        $this->authorize('user.edit');
+        $this->ensurePermission('user.edit');
         $this->resetForm();
         $u = User::with('roles:id')->findOrFail($id);
         $this->editingId = $u->id;
@@ -88,7 +88,7 @@ class UserModal extends Component
 
     public function save(): void
     {
-        $this->authorize($this->editingId ? 'user.edit' : 'user.create');
+        $this->ensurePermission($this->editingId ? 'user.edit' : 'user.create');
         $data = $this->validate();
         $roles = $data['roles'] ?? [];
         unset($data['roles'], $data['password_confirmation']);
@@ -119,7 +119,7 @@ class UserModal extends Component
     #[On('user:delete')]
     public function delete(int $id): void
     {
-        $this->authorize('user.delete');
+        $this->ensurePermission('user.delete');
         if ($id === auth()->id()) {
             $this->dispatch('toast:warning', message: __('app.not_authorized'));
 
@@ -130,7 +130,7 @@ class UserModal extends Component
         $this->dispatch('toast:success', message: __('app.deleted_successfully'));
     }
 
-    protected function authorize(string $permission): void
+    protected function ensurePermission(string $permission): void
     {
         $user = auth()->user();
         if (! $user || ! $user->hasPermission($permission)) {

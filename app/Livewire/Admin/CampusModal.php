@@ -56,7 +56,7 @@ class CampusModal extends Component
     #[On('campus:create')]
     public function openCreate(): void
     {
-        $this->authorize('campus.create');
+        $this->ensurePermission('campus.create');
         $this->resetForm();
         $this->dispatch('modal:show', id: 'campusModal');
     }
@@ -64,7 +64,7 @@ class CampusModal extends Component
     #[On('campus:edit')]
     public function openEdit(int $id): void
     {
-        $this->authorize('campus.edit');
+        $this->ensurePermission('campus.edit');
         $this->resetForm();
         $c = Campus::findOrFail($id);
         $this->editingId = $c->id;
@@ -82,7 +82,7 @@ class CampusModal extends Component
 
     public function save(): void
     {
-        $this->authorize($this->editingId ? 'campus.edit' : 'campus.create');
+        $this->ensurePermission($this->editingId ? 'campus.edit' : 'campus.create');
         $data = $this->validate();
 
         if ($this->editingId) {
@@ -102,13 +102,13 @@ class CampusModal extends Component
     #[On('campus:delete')]
     public function delete(int $id): void
     {
-        $this->authorize('campus.delete');
+        $this->ensurePermission('campus.delete');
         Campus::findOrFail($id)->delete();
         $this->dispatch('datatable:reload', table: 'campuses-table');
         $this->dispatch('toast:success', message: __('app.deleted_successfully'));
     }
 
-    protected function authorize(string $permission): void
+    protected function ensurePermission(string $permission): void
     {
         $user = auth()->user();
         if (! $user || ! $user->hasPermission($permission)) {

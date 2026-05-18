@@ -49,7 +49,7 @@ class SubjectModal extends Component
     #[On('subject:create')]
     public function openCreate(): void
     {
-        $this->authorize('subject.create');
+        $this->ensurePermission('subject.create');
         $this->resetForm();
         $this->dispatch('modal:show', id: 'subjectModal');
     }
@@ -57,7 +57,7 @@ class SubjectModal extends Component
     #[On('subject:edit')]
     public function openEdit(int $id): void
     {
-        $this->authorize('subject.edit');
+        $this->ensurePermission('subject.edit');
         $this->resetForm();
         $s = Subject::findOrFail($id);
         $this->editingId = $s->id;
@@ -73,7 +73,7 @@ class SubjectModal extends Component
 
     public function save(): void
     {
-        $this->authorize($this->editingId ? 'subject.edit' : 'subject.create');
+        $this->ensurePermission($this->editingId ? 'subject.edit' : 'subject.create');
         $data = $this->validate();
 
         if ($this->editingId) {
@@ -93,13 +93,13 @@ class SubjectModal extends Component
     #[On('subject:delete')]
     public function delete(int $id): void
     {
-        $this->authorize('subject.delete');
+        $this->ensurePermission('subject.delete');
         Subject::findOrFail($id)->delete();
         $this->dispatch('datatable:reload', table: 'subjects-table');
         $this->dispatch('toast:success', message: __('app.deleted_successfully'));
     }
 
-    protected function authorize(string $permission): void
+    protected function ensurePermission(string $permission): void
     {
         $user = auth()->user();
         if (! $user || ! $user->hasPermission($permission)) {

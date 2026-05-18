@@ -38,7 +38,7 @@ class PermissionModal extends Component
     #[On('permission:create')]
     public function openCreate(): void
     {
-        $this->authorize('permission.create');
+        $this->ensurePermission('permission.create');
         $this->resetForm();
         $this->dispatch('modal:show', id: 'permissionModal');
     }
@@ -46,7 +46,7 @@ class PermissionModal extends Component
     #[On('permission:edit')]
     public function openEdit(int $id): void
     {
-        $this->authorize('permission.edit');
+        $this->ensurePermission('permission.edit');
         $this->resetForm();
         $p = Permission::findOrFail($id);
         $this->editingId = $p->id;
@@ -59,7 +59,7 @@ class PermissionModal extends Component
 
     public function save(): void
     {
-        $this->authorize($this->editingId ? 'permission.edit' : 'permission.create');
+        $this->ensurePermission($this->editingId ? 'permission.edit' : 'permission.create');
         $data = $this->validate();
         $data['slug'] = $data['slug'] ?: Str::slug($data['module'].'.'.$data['name'], '.');
 
@@ -80,13 +80,13 @@ class PermissionModal extends Component
     #[On('permission:delete')]
     public function delete(int $id): void
     {
-        $this->authorize('permission.delete');
+        $this->ensurePermission('permission.delete');
         Permission::findOrFail($id)->delete();
         $this->dispatch('datatable:reload', table: 'permissions-table');
         $this->dispatch('toast:success', message: __('app.deleted_successfully'));
     }
 
-    protected function authorize(string $permission): void
+    protected function ensurePermission(string $permission): void
     {
         $user = auth()->user();
         if (! $user || ! $user->hasPermission($permission)) {

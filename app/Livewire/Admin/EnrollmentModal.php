@@ -67,7 +67,7 @@ class EnrollmentModal extends Component
     #[On('enrollment:create')]
     public function openCreate(): void
     {
-        $this->authorize('enrollment.create');
+        $this->ensurePermission('enrollment.create');
         $this->resetForm();
         $this->dispatch('modal:show', id: 'enrollmentModal');
     }
@@ -75,7 +75,7 @@ class EnrollmentModal extends Component
     #[On('enrollment:edit')]
     public function openEdit(int $id): void
     {
-        $this->authorize('enrollment.edit');
+        $this->ensurePermission('enrollment.edit');
         $this->resetForm();
         $e = Enrollment::findOrFail($id);
         $this->editingId = $e->id;
@@ -94,7 +94,7 @@ class EnrollmentModal extends Component
 
     public function save(): void
     {
-        $this->authorize($this->editingId ? 'enrollment.edit' : 'enrollment.create');
+        $this->ensurePermission($this->editingId ? 'enrollment.edit' : 'enrollment.create');
         $data = $this->validate();
 
         if ($this->editingId) {
@@ -114,13 +114,13 @@ class EnrollmentModal extends Component
     #[On('enrollment:delete')]
     public function delete(int $id): void
     {
-        $this->authorize('enrollment.delete');
+        $this->ensurePermission('enrollment.delete');
         Enrollment::findOrFail($id)->delete();
         $this->dispatch('datatable:reload', table: 'enrollments-table');
         $this->dispatch('toast:success', message: __('app.deleted_successfully'));
     }
 
-    protected function authorize(string $permission): void
+    protected function ensurePermission(string $permission): void
     {
         $user = auth()->user();
         if (! $user || ! $user->hasPermission($permission)) {

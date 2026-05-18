@@ -46,7 +46,7 @@ class AcademicYearModal extends Component
     #[On('academic_year:create')]
     public function openCreate(): void
     {
-        $this->authorize('academic_year.create');
+        $this->ensurePermission('academic_year.create');
         $this->resetForm();
         $this->dispatch('modal:show', id: 'academicYearModal');
     }
@@ -54,7 +54,7 @@ class AcademicYearModal extends Component
     #[On('academic_year:edit')]
     public function openEdit(int $id): void
     {
-        $this->authorize('academic_year.edit');
+        $this->ensurePermission('academic_year.edit');
         $this->resetForm();
         $y = AcademicYear::findOrFail($id);
         $this->editingId = $y->id;
@@ -69,7 +69,7 @@ class AcademicYearModal extends Component
 
     public function save(): void
     {
-        $this->authorize($this->editingId ? 'academic_year.edit' : 'academic_year.create');
+        $this->ensurePermission($this->editingId ? 'academic_year.edit' : 'academic_year.create');
         $data = $this->validate();
 
         if ($this->editingId) {
@@ -89,13 +89,13 @@ class AcademicYearModal extends Component
     #[On('academic_year:delete')]
     public function delete(int $id): void
     {
-        $this->authorize('academic_year.delete');
+        $this->ensurePermission('academic_year.delete');
         AcademicYear::findOrFail($id)->delete();
         $this->dispatch('datatable:reload', table: 'academic-years-table');
         $this->dispatch('toast:success', message: __('app.deleted_successfully'));
     }
 
-    protected function authorize(string $permission): void
+    protected function ensurePermission(string $permission): void
     {
         $user = auth()->user();
         if (! $user || ! $user->hasPermission($permission)) {

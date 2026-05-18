@@ -82,7 +82,7 @@ class TeacherModal extends Component
     #[On('teacher:create')]
     public function openCreate(): void
     {
-        $this->authorize('teacher.create');
+        $this->ensurePermission('teacher.create');
         $this->resetForm();
         $this->dispatch('modal:show', id: 'teacherModal');
     }
@@ -90,7 +90,7 @@ class TeacherModal extends Component
     #[On('teacher:edit')]
     public function openEdit(int $id): void
     {
-        $this->authorize('teacher.edit');
+        $this->ensurePermission('teacher.edit');
         $this->resetForm();
         $t = Teacher::findOrFail($id);
         $this->editingId = $t->id;
@@ -115,7 +115,7 @@ class TeacherModal extends Component
 
     public function save(): void
     {
-        $this->authorize($this->editingId ? 'teacher.edit' : 'teacher.create');
+        $this->ensurePermission($this->editingId ? 'teacher.edit' : 'teacher.create');
         $data = $this->validate();
 
         if ($this->editingId) {
@@ -135,13 +135,13 @@ class TeacherModal extends Component
     #[On('teacher:delete')]
     public function delete(int $id): void
     {
-        $this->authorize('teacher.delete');
+        $this->ensurePermission('teacher.delete');
         Teacher::findOrFail($id)->delete();
         $this->dispatch('datatable:reload', table: 'teachers-table');
         $this->dispatch('toast:success', message: __('app.deleted_successfully'));
     }
 
-    protected function authorize(string $permission): void
+    protected function ensurePermission(string $permission): void
     {
         $user = auth()->user();
         if (! $user || ! $user->hasPermission($permission)) {
