@@ -1,0 +1,11 @@
+/* dark-theme.css - opt-in via <html class="dark-theme"> */
+html.dark-theme {
+    --ams-bg: #0f172a;
+    --ams-card-bg: #1e293b;
+    --ams-text: #e5e7eb;
+    --ams-border: #334155;
+}
+html.dark-theme body { background: var(--ams-bg); color: var(--ams-text); }
+html.dark-theme .card { background: var(--ams-card-bg); border-color: var(--ams-border); color: var(--ams-text); }
+html.dark-theme .top-header { background: var(--ams-card-bg); border-color: var(--ams-border); }
+html.dark-theme .top-header .nav-link { color: var(--ams-text); }

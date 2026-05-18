@@ -1,0 +1,33 @@
+/* bootstrap-extended.css - stand-in for Skodash extended Bootstrap utilities */
+.radius-10 { border-radius: 10px; }
+.radius-15 { border-radius: 15px; }
+.bg-pink { background-color: #e83e8c !important; }
+.bg-orange { background-color: #fd7e14 !important; }
+.bg-bronze { background-color: #cd7f32 !important; }
+.bg-purple { background-color: #6f42c1 !important; }
+.bg-gradient { background-image: linear-gradient(45deg, rgba(255,255,255,.15), rgba(255,255,255,0)); }
+
+.apps { transition: transform .15s ease, background-color .15s ease; }
+.apps:hover { background-color: var(--bs-light, #f8f9fa); transform: translateY(-1px); }
+.apps-icon-box {
+    width: 50px; height: 50px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px; font-size: 1.25rem;
+}
+.apps-name { font-size: .8rem; }
+
+.dropdown-large { min-width: 280px; }
+.dropdown-menu-lg-end { right: 0; left: auto; }
+
+.dropdown-user-name { font-size: 0.95rem; margin: 0; }
+.dropdown-user-designation { font-size: 0.78rem; }
+
+.setting-icon {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--ams-primary-light, #e8efff);
+    color: var(--ams-primary, #2c5cb9);
+    border-radius: 50%;
+}
+
+.search-toggle-icon, .nav-toggle-icon { cursor: pointer; }

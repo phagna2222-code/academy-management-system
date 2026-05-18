@@ -1,0 +1,8 @@
+/* icons.css - stand-in for Skodash icons; we use Bootstrap Icons via plugins/bootstrap-icons */
+/* The supplied head.blade.php also imports plugins/bootstrap-icons/font/bootstrap-icons.css. */
+[class^="bx-"], [class*=" bx-"] { /* keep boxicons class names from rendering as text */
+    font-family: 'bootstrap-icons' !important;
+    speak: none; font-style: normal; font-weight: normal;
+}
+.bx-home-alt::before     { content: "\f425"; } /* house-door */
+.bxs-up-arrow-alt::before { content: "\f128"; } /* arrow-up */

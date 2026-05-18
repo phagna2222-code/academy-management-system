@@ -1,0 +1,11 @@
+/* header-colors.css */
+.headercolor1 { background: linear-gradient(45deg, #2c5cb9, #4d7cdc); }
+.headercolor2 { background: linear-gradient(45deg, #6f42c1, #a07bdc); }
+.headercolor3 { background: linear-gradient(45deg, #198754, #4dbf80); }
+.headercolor4 { background: linear-gradient(45deg, #dc3545, #f47d8a); }
+.headercolor5 { background: linear-gradient(45deg, #fd7e14, #ffb15a); }
+.headercolor6 { background: linear-gradient(45deg, #20c997, #6cead0); }
+.headercolor7 { background: linear-gradient(45deg, #0d6efd, #5da4ff); }
+.headercolor8 { background: linear-gradient(45deg, #6c757d, #adb5bd); }
+
+.indigator { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }

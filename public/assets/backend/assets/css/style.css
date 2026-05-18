@@ -1,0 +1,173 @@
+/* ==========================================================================
+   Academy Management System - Admin Skin (Skodash-style)
+   Lightweight stand-in for the Skodash theme so the supplied layout works
+   out of the box without any external download. Replace this file with the
+   original Skodash style.css to get the exact theme look.
+   ========================================================================== */
+:root {
+    --ams-sidebar-w: 260px;
+    --ams-sidebar-w-collapsed: 70px;
+    --ams-header-h: 60px;
+    --ams-primary: #2c5cb9;
+    --ams-primary-light: #e8efff;
+    --ams-bg: #f3f5f9;
+    --ams-card-bg: #ffffff;
+    --ams-text: #333;
+    --ams-muted: #6c757d;
+    --ams-border: #e5e7eb;
+}
+
+html, body { height: 100%; }
+body {
+    margin: 0;
+    background: var(--ams-bg);
+    color: var(--ams-text);
+    font-family: 'Roboto', system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.wrapper { min-height: 100vh; }
+
+/* Sidebar */
+.sidebar-wrapper {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: var(--ams-sidebar-w);
+    background: #1e2a44;
+    color: #cfd8e3;
+    overflow-y: auto;
+    z-index: 1040;
+    transition: width .2s ease;
+}
+.sidebar-wrapper .sidebar-header {
+    display: flex; align-items: center; gap: .5rem;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    background: #18233a;
+}
+.sidebar-wrapper .logo-icon { width: 32px; height: 32px; }
+.sidebar-wrapper .logo-text { color: #fff; font-size: 1.25rem; font-weight: 600; margin: 0; }
+.sidebar-wrapper .toggle-icon { color: #cfd8e3; cursor: pointer; }
+
+.metismenu { list-style: none; padding: 8px 0; margin: 0; }
+.metismenu li > a {
+    display: flex; align-items: center; gap: .75rem;
+    padding: 10px 16px;
+    color: #cfd8e3; text-decoration: none;
+    border-left: 3px solid transparent;
+}
+.metismenu li > a:hover,
+.metismenu li.mm-active > a {
+    color: #fff; background: rgba(255,255,255,.05);
+    border-left-color: var(--ams-primary);
+}
+.metismenu li > a .parent-icon { width: 22px; text-align: center; }
+.metismenu li > a .menu-title { flex: 1; }
+.metismenu .has-arrow::after {
+    content: "";
+    display: inline-block;
+    width: .5rem; height: .5rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform .2s ease;
+    margin-left: auto;
+}
+.metismenu .mm-active > .has-arrow::after { transform: rotate(45deg); }
+.metismenu ul {
+    list-style: none; padding-left: 36px; margin: 0;
+    background: rgba(0,0,0,.15);
+}
+.metismenu ul li a { padding: 8px 12px; font-size: .92rem; }
+
+/* Header */
+.top-header {
+    position: fixed; top: 0; right: 0;
+    left: var(--ams-sidebar-w);
+    height: var(--ams-header-h);
+    background: #fff;
+    border-bottom: 1px solid var(--ams-border);
+    display: flex; align-items: center; padding: 0 1rem;
+    z-index: 1030;
+    transition: left .2s ease;
+}
+.top-header .navbar { width: 100%; padding: 0; }
+.top-header .navbar-nav { display: flex; gap: .5rem; align-items: center; }
+.top-header .nav-link { color: #444; padding: .25rem .5rem; }
+.searchbar { position: relative; max-width: 360px; flex: 1; margin-left: 1rem; }
+.searchbar .search-icon { left: 0; }
+
+.user-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+.user-name { font-weight: 500; }
+
+.mobile-toggle-icon { font-size: 1.4rem; cursor: pointer; margin-right: .5rem; }
+
+/* Page content */
+.page-content {
+    margin-left: var(--ams-sidebar-w);
+    padding: calc(var(--ams-header-h) + 1rem) 1.5rem 2rem;
+    transition: margin-left .2s ease;
+}
+.page-breadcrumb .breadcrumb-title { font-weight: 600; border-right: 1px solid var(--ams-border); }
+
+/* Toggled / collapsed sidebar */
+.wrapper.toggled .sidebar-wrapper { width: var(--ams-sidebar-w-collapsed); }
+.wrapper.toggled .sidebar-wrapper .logo-text,
+.wrapper.toggled .sidebar-wrapper .menu-title,
+.wrapper.toggled .sidebar-wrapper .has-arrow::after,
+.wrapper.toggled .sidebar-wrapper ul ul { display: none; }
+.wrapper.toggled .top-header { left: var(--ams-sidebar-w-collapsed); }
+.wrapper.toggled .page-content { margin-left: var(--ams-sidebar-w-collapsed); }
+
+/* Cards */
+.card {
+    background: var(--ams-card-bg);
+    border: 1px solid var(--ams-border);
+    border-radius: .5rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+
+/* Buttons (use Bootstrap primary; keep custom helpers Skodash defines) */
+.split-bg-primary { background-color: var(--ams-primary); }
+.btn-primary { background-color: var(--ams-primary); border-color: var(--ams-primary); }
+.bg-gradient.bg-primary { background-image: linear-gradient(45deg, #2c5cb9, #4d7cdc); }
+
+/* Back to top */
+.back-to-top {
+    position: fixed; right: 1rem; bottom: 1rem;
+    background: var(--ams-primary); color: #fff;
+    width: 38px; height: 38px; border-radius: 50%;
+    display: none; align-items: center; justify-content: center;
+    text-decoration: none; z-index: 1050;
+}
+.back-to-top.show { display: inline-flex; }
+
+/* Switcher */
+.switcher-body .btn-switcher {
+    position: fixed; right: 0; top: 40%;
+    border-radius: .5rem 0 0 .5rem;
+    z-index: 1050;
+}
+
+/* Overlay for mobile */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 1035; }
+.wrapper.show-overlay .overlay { display: block; }
+
+/* Responsive */
+@media (max-width: 1199.98px) {
+    .sidebar-wrapper { transform: translateX(-100%); }
+    .wrapper.show-sidebar .sidebar-wrapper { transform: translateX(0); }
+    .top-header { left: 0; }
+    .page-content { margin-left: 0; }
+}
+
+/* DataTables polish */
+table.dataTable thead th { border-bottom: 2px solid var(--ams-border); }
+.dataTables_wrapper .row { align-items: center; }
+.dataTables_wrapper .dataTables_filter input { margin-left: .5rem; }
+
+/* Flatpickr / Tom Select tweaks */
+.flatpickr-input.form-control { background-color: #fff; }
+.ts-wrapper.form-control { padding: 0; }
+
+/* Tom Select width fix for forms */
+.ts-control { min-height: calc(1.5em + .75rem + 2px); }
