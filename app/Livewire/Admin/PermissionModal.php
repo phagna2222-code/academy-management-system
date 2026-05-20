@@ -60,8 +60,12 @@ class PermissionModal extends Component
     public function save(): void
     {
         $this->ensurePermission($this->editingId ? 'permission.edit' : 'permission.create');
+
+        if (trim($this->slug) === '') {
+            $this->slug = Str::slug($this->module.'.'.$this->name, '.');
+        }
+
         $data = $this->validate();
-        $data['slug'] = $data['slug'] ?: Str::slug($data['module'].'.'.$data['name'], '.');
 
         if ($this->editingId) {
             Permission::findOrFail($this->editingId)->update($data);
