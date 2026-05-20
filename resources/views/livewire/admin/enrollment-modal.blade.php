@@ -43,18 +43,18 @@
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label">{{ __('app.menu.semester') }}</label>
-                        <select wire:model="semester_id" class="form-select">
-                            <option value="">—</option>
+                        <label class="form-label">{{ __('app.menu.semester') }} <span class="text-danger">*</span></label>
+                        <select wire:model="semester_id" class="form-select" required>
+                            <option value="">{{ __('app.common.choose') }}</option>
                             @foreach($semesters as $s)
                                 <option value="{{ $s->id }}">{{ $s->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label">{{ __('app.menu.program') }}</label>
-                        <select wire:model="program_id" class="form-select">
-                            <option value="">—</option>
+                        <label class="form-label">{{ __('app.menu.program') }} <span class="text-danger">*</span></label>
+                        <select wire:model="program_id" class="form-select" required>
+                            <option value="">{{ __('app.common.choose') }}</option>
                             @foreach($programs as $p)
                                 <option value="{{ $p->id }}">{{ $p->name }}</option>
                             @endforeach
