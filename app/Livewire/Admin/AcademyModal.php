@@ -53,7 +53,7 @@ class AcademyModal extends Component
     #[On('academy:create')]
     public function openCreate(): void
     {
-        $this->authorize('academy.create');
+        $this->ensurePermission('academy.create');
         $this->resetForm();
         $this->dispatch('modal:show', id: 'academyModal');
     }
@@ -61,7 +61,7 @@ class AcademyModal extends Component
     #[On('academy:edit')]
     public function openEdit(int $id): void
     {
-        $this->authorize('academy.edit');
+        $this->ensurePermission('academy.edit');
         $this->resetForm();
         $a = Academy::findOrFail($id);
         $this->editingId = $a->id;
@@ -79,7 +79,7 @@ class AcademyModal extends Component
 
     public function save(): void
     {
-        $this->authorize($this->editingId ? 'academy.edit' : 'academy.create');
+        $this->ensurePermission($this->editingId ? 'academy.edit' : 'academy.create');
         $data = $this->validate();
 
         if ($this->editingId) {
@@ -99,13 +99,13 @@ class AcademyModal extends Component
     #[On('academy:delete')]
     public function delete(int $id): void
     {
-        $this->authorize('academy.delete');
+        $this->ensurePermission('academy.delete');
         Academy::findOrFail($id)->delete();
         $this->dispatch('datatable:reload', table: 'academies-table');
         $this->dispatch('toast:success', message: __('app.deleted_successfully'));
     }
 
-    protected function authorize(string $permission): void
+    protected function ensurePermission(string $permission): void
     {
         $user = auth()->user();
         if (! $user || ! $user->hasPermission($permission)) {

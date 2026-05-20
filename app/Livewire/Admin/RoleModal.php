@@ -50,7 +50,7 @@ class RoleModal extends Component
     #[On('role:create')]
     public function openCreate(): void
     {
-        $this->authorize('role.create');
+        $this->ensurePermission('role.create');
         $this->resetForm();
         $this->dispatch('modal:show', id: 'roleModal');
     }
@@ -58,7 +58,7 @@ class RoleModal extends Component
     #[On('role:edit')]
     public function openEdit(int $id): void
     {
-        $this->authorize('role.edit');
+        $this->ensurePermission('role.edit');
         $this->resetForm();
         $r = Role::with('permissions:id')->findOrFail($id);
         $this->editingId = $r->id;
@@ -73,7 +73,7 @@ class RoleModal extends Component
 
     public function save(): void
     {
-        $this->authorize($this->editingId ? 'role.edit' : 'role.create');
+        $this->ensurePermission($this->editingId ? 'role.edit' : 'role.create');
         $data = $this->validate();
         $perms = $data['permissions'] ?? [];
         unset($data['permissions']);
@@ -100,13 +100,13 @@ class RoleModal extends Component
     #[On('role:delete')]
     public function delete(int $id): void
     {
-        $this->authorize('role.delete');
+        $this->ensurePermission('role.delete');
         Role::findOrFail($id)->delete();
         $this->dispatch('datatable:reload', table: 'roles-table');
         $this->dispatch('toast:success', message: __('app.deleted_successfully'));
     }
 
-    protected function authorize(string $permission): void
+    protected function ensurePermission(string $permission): void
     {
         $user = auth()->user();
         if (! $user || ! $user->hasPermission($permission)) {

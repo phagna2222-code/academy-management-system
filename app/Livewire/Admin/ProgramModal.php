@@ -49,7 +49,7 @@ class ProgramModal extends Component
     #[On('program:create')]
     public function openCreate(): void
     {
-        $this->authorize('program.create');
+        $this->ensurePermission('program.create');
         $this->resetForm();
         $this->dispatch('modal:show', id: 'programModal');
     }
@@ -57,7 +57,7 @@ class ProgramModal extends Component
     #[On('program:edit')]
     public function openEdit(int $id): void
     {
-        $this->authorize('program.edit');
+        $this->ensurePermission('program.edit');
         $this->resetForm();
         $p = Program::findOrFail($id);
         $this->editingId = $p->id;
@@ -73,7 +73,7 @@ class ProgramModal extends Component
 
     public function save(): void
     {
-        $this->authorize($this->editingId ? 'program.edit' : 'program.create');
+        $this->ensurePermission($this->editingId ? 'program.edit' : 'program.create');
         $data = $this->validate();
 
         if ($this->editingId) {
@@ -93,13 +93,13 @@ class ProgramModal extends Component
     #[On('program:delete')]
     public function delete(int $id): void
     {
-        $this->authorize('program.delete');
+        $this->ensurePermission('program.delete');
         Program::findOrFail($id)->delete();
         $this->dispatch('datatable:reload', table: 'programs-table');
         $this->dispatch('toast:success', message: __('app.deleted_successfully'));
     }
 
-    protected function authorize(string $permission): void
+    protected function ensurePermission(string $permission): void
     {
         $user = auth()->user();
         if (! $user || ! $user->hasPermission($permission)) {

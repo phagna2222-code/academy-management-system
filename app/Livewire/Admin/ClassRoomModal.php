@@ -80,7 +80,7 @@ class ClassRoomModal extends Component
     #[On('class_room:create')]
     public function openCreate(): void
     {
-        $this->authorize('class_room.create');
+        $this->ensurePermission('class_room.create');
         $this->resetForm();
         $this->dispatch('modal:show', id: 'classRoomModal');
     }
@@ -88,7 +88,7 @@ class ClassRoomModal extends Component
     #[On('class_room:edit')]
     public function openEdit(int $id): void
     {
-        $this->authorize('class_room.edit');
+        $this->ensurePermission('class_room.edit');
         $this->resetForm();
         $c = ClassRoom::findOrFail($id);
         $this->editingId = $c->id;
@@ -111,7 +111,7 @@ class ClassRoomModal extends Component
 
     public function save(): void
     {
-        $this->authorize($this->editingId ? 'class_room.edit' : 'class_room.create');
+        $this->ensurePermission($this->editingId ? 'class_room.edit' : 'class_room.create');
         $data = $this->validate();
 
         if ($this->editingId) {
@@ -131,13 +131,13 @@ class ClassRoomModal extends Component
     #[On('class_room:delete')]
     public function delete(int $id): void
     {
-        $this->authorize('class_room.delete');
+        $this->ensurePermission('class_room.delete');
         ClassRoom::findOrFail($id)->delete();
         $this->dispatch('datatable:reload', table: 'class-rooms-table');
         $this->dispatch('toast:success', message: __('app.deleted_successfully'));
     }
 
-    protected function authorize(string $permission): void
+    protected function ensurePermission(string $permission): void
     {
         $user = auth()->user();
         if (! $user || ! $user->hasPermission($permission)) {
