@@ -39,7 +39,7 @@
                     <div class="col-md-6 d-flex align-items-center">
                         <div class="form-check">
                             <input wire:model="is_current" id="ay-is-current" class="form-check-input" type="checkbox">
-                            <label class="form-check-label" for="ay-is-current">{{ __('app.fields.is_current') }}</label>
+                            <label class="form-check-label" for="ay-is-current">{{ __('app.common.is_current') }}</label>
                         </div>
                     </div>
                     <div class="col-md-6">
