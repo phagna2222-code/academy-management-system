@@ -10,10 +10,12 @@ class ExampleTest extends TestCase
     /**
      * A basic test example.
      */
-    public function test_the_application_returns_a_successful_response(): void
+    public function test_root_redirects_unauthenticated_visitors_to_login(): void
     {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
+        // GET / is a permanent redirect to admin.dashboard, which is itself
+        // behind auth — so an anonymous visitor follows two hops and lands
+        // on the login screen.
+        $this->get('/')->assertRedirect(route('admin.dashboard'));
+        $this->get(route('admin.dashboard'))->assertRedirect(route('login'));
     }
 }
